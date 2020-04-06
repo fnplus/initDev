@@ -1,7 +1,8 @@
-import { Controller, Get, Req, Param, Post, Body } from '@nestjs/common';
+import { Controller, Get, Req, Param, Post, Body, UseInterceptors, UploadedFile } from '@nestjs/common';
 import { Request } from 'express';
 import { ToolsDto } from './dto/tools.dto';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiConsumes, ApiBody, ApiResponse } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express'
 import { ToolsService } from './tools.service';
 
 
@@ -12,16 +13,23 @@ export class ToolsController {
     constructor(private readonly _toolService: ToolsService) {}
 
     @Get()
-    findAll(@Req() request: Request): string {
-        return 'This action returns all cats';
+    @ApiOperation({ summary: 'Get all scripts' })
+    findAll(@Req() request: Request): Promise<ToolsDto[]> {
+        return this._toolService.findAll();
     }
 
     @Get(':id')
-    findOne(@Param('id') id): string {
-        return 'This action returns all cats';
+    @ApiOperation({ summary: 'Get script by id' })
+    findOne(@Param('id') id): Promise<ToolsDto> {
+        return this._toolService.findOne(id);
     }
+
     @Post()
-    create(@Body() toolsDto: ToolsDto) {
-        this._toolService.create(toolsDto);
+    @UseInterceptors(FileInterceptor('file'))
+    @ApiConsumes('multipart/form-data')
+    create(@Body() toolsDto: ToolsDto, @UploadedFile() file): Promise<ToolsDto> {
+        console.log('data is --> ', toolsDto);
+        console.log('file is --> ', file);
+        return this._toolService.create(toolsDto);
     }
 }

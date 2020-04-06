@@ -6,7 +6,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const options = new DocumentBuilder()
-    .setTitle('devInit')
+    .setTitle('initDev')
     .setDescription('REST-API for initDev')
     .setVersion('1.0')
     .build();

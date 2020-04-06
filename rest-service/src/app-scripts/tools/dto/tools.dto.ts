@@ -1,7 +1,24 @@
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsOptional } from 'class-validator';
+
 export class ToolsDto {
-    readonly id: string;
-    readonly name: string;
-    readonly version: string;
-    readonly os: string;
-    readonly path: string;
-  }
+  @IsString()
+  @ApiProperty()
+  readonly id: string;
+
+  @IsString()
+  @ApiProperty()
+  readonly name: string;
+
+  @IsString()
+  @ApiProperty()
+  readonly version: string;
+
+  @IsString()
+  @ApiProperty()
+  readonly os: string;
+
+  @IsString()
+  @ApiPropertyOptional()
+  readonly path: string;
+}
